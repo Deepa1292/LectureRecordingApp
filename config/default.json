@@ -1,0 +1,29 @@
+{
+   "CAS": {
+    "casendpoint": "https://sso.hrz.tu-darmstadt.de",
+    "casreturn": "http://localhost:3000"
+     },
+
+  "Store": {
+    "protocol": "http://",
+    "url": "localhost",
+    "port": "10035",
+    "repository": "demo",
+    "Credentials": {
+       "user": "test",
+       "password": "xyzzy"
+    }
+  },
+  "Node": {
+    "server": {
+      "port": "3000"
+    }
+  },
+  "Logging": {
+    "level": "dev"
+  },
+"CAS": {
+    "casendpoint": "https://sso.hrz.tu-darmstadt.de",
+    "casreturn": "http://localhost:3000"
+  }
+}

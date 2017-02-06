@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+
+
+<script type="text/javascript" src="/libs/angular/angular.min.js"></script>
+<script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+<script type="text/javascript" src="/libs/angular/angular.js"></script>
+<script src="/libs/bower_components/angular/angular.min.js"></script>
+<script src="/libs/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+<script src="/libs/bower_components/videogular/videogular.js"></script>
+<script src="/libs/bower_components/videogular-controls-master/vg-controls.js"></script>
+<script src="/libs/bower_components/videogular-overlay-play/vg-overlay-play.js"></script>
+<script src="/libs/bower_components/videogular-poster/vg-poster.js"></script>
+<script src="/libs/bower_components/videogular-buffering/vg-buffering.js"></script>
+
+
+
+<script type="text/javascript">
+    var config = angular.module('app.config',[]);
+config.constant('LECTURES_URL','http://localhost:3000/lectures');
+config.constant('VIDEO_URL','http://localhost:3000/lectures/iptk');
+</script>
+
+
+<script type="text/javascript">
+    
+var videoController = angular.module('LectureDisplay', ['app.config',"ngSanitize",
+            "com.2fdevs.videogular",
+            "com.2fdevs.videogular.plugins.controls",
+            "com.2fdevs.videogular.plugins.overlayplay",
+            "com.2fdevs.videogular.plugins.poster"]);
+videoController.controller('videoController', ['$rootScope','$scope', '$http', 'VIDEO_URL','$sce', function($rootScope, $scope, $http, VIDEO_URL, $sce) {
+      
+
+    $scope.videoList = [];
+    $scope.temp = "http://clls.rbg.informatik.tu-darmstadt.de/clls/lecturematerial/c1e7e95bf36082f4/5bead12008a8d000/videos/video.mp4";
+   
+   var req = {
+      method: 'GET',
+      //url: 'http://localhost:3000/lectures/iptk',
+      url: VIDEO_URL,
+      headers: {
+         'Content-Type': 'application/json'
+      }
+   };
+
+
+
+   $http(req).success(function(data, status, headers, config) {
+      
+      
+      //$scope.link = $scope.link.replace(/^"(.*)"$/, '$1');
+      //$scope.link2 = $scope.videoList[1].url;
+      //$scope.img1 = $scope.videoList[0].thumbnails;
+      //$scope.temp = angular.toJson(data[0].url);
+      //$scope.link = $sce.trustAsResourceUrl($scope.videoList[0].url);
+     //$scope.link2 = data[0].url;
+     $scope.videoList = data;
+    // alert($scope.videoList[0].url);
+   //$scope.link2 = $scope.videoList[0]['url'];
+   //this.config.sources['src'] = data[0].url;
+   //this.config.sources['type'] = "video/mp4"
+   //alert(videoController.config.sources[0]['src']);
+   //alert($rootScope.data);
+   
+    });
+   
+   //alert($rootScope.videoList[0].url);
+    
+        //alert(data[0].url);
+    
+   videoController.config = {
+                sources: [
+                    {src: $sce.trustAsResourceUrl("http://static.videogular.com/assets/videos/videogular.mp4") , type: "video/mp4"}
+                    //{src: $sce.trustAsResourceUrl("http://static.videogular.com/assets/videos/videogular.webm"), type: "video/webm"},
+                    //{src: $sce.trustAsResourceUrl("http://static.videogular.com/assets/videos/videogular.ogg"), type: "video/ogg"}
+                ],
+                tracks: [
+                    {
+                        src: "http://www.videogular.com/assets/subs/pale-blue-dot.vtt",
+                        kind: "subtitles",
+                        srclang: "en",
+                        label: "English",
+                        default: ""
+                    }
+                ],
+                theme: "/libs/bower_components/videogular-themes-default/videogular.css",
+                plugins: {
+                    poster: "http://www.videogular.com/assets/images/videogular.png"
+                }
+            };
+
+//this.config.sources[0].src.push("http://clls.rbg.informatik.tu-darmstadt.de/clls/lecturematerial/c1e7e95bf36082f4/5bead12008a8d000/videos/video.mp4");
+//this.config.sources[0].type.push("video/mp4");
+ //alert(this.config.sources[0]['src']);
+ //this.config.sources[0]['src']("http://clls.rbg.informatik.tu-darmstadt.de/clls/lecturematerial/c1e7e95bf36082f4/5bead12008a8d000/videos/video.mp4");
+ //this.config.sources[0]['type']("video/mp4");
+ 
+
+ 
+
+//alert(videoController.config.sources[0]['src']);
+            
+   
+}]);
+
+videoController.config(function($sceDelegateProvider) {
+ $sceDelegateProvider.resourceUrlWhitelist([
+   'self',
+   'http:/clls.rbg.informatik.tu-darmstadt.de/**']);
+ });
+</script>
+
+<style>
+.videogular-container {
+    width: 100%;
+    height: 320px;
+    margin: auto;
+    overflow: hidden;
+}
+ 
+@media (min-width: 1200px) {
+    .videogular-container {
+        width: 1170px;
+        height: 658.125px;
+    }
+}
+ 
+@media (min-width: 992px) and (max-width: 1199px) {
+    .videogular-container {
+        width: 940px;
+        height: 528.75px;
+    }
+}
+ 
+@media (min-width: 768px) and (max-width: 991px) {
+    .videogular-container {
+        width: 728px;
+        height: 409.5px;
+    }
+}
+</style>
+
+
+
+
+<div ng-app="LectureDisplay">
+    <div ng-controller="videoController as controller" class="videogular-container">
+
+        <videogular vg-theme="controller.config.theme">
+            <vg-media vg-src="controller.config.sources"
+                    vg-tracks="controller.config.tracks">
+            </vg-media>
+ 
+            <vg-controls>
+                <vg-play-pause-button></vg-play-pause-button>
+                <vg-time-display>{{ currentTime | date:'mm:ss' }}</vg-time-display>
+                <vg-scrub-bar>
+                    <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+                </vg-scrub-bar>
+                <vg-time-display>{{ timeLeft | date:'mm:ss' }}</vg-time-display>
+                <vg-volume>
+                    <vg-mute-button></vg-mute-button>
+                    <vg-volume-bar></vg-volume-bar>
+                </vg-volume>
+                <vg-fullscreen-button></vg-fullscreen-button>
+            </vg-controls>
+ 
+            <vg-overlay-play></vg-overlay-play>
+            <vg-poster vg-url='controller.config.plugins.poster'></vg-poster>
+        </videogular>
+        
+    </div>
+</div>
+
+<!-- <div class="one" ng-controller= "videoController">
+<h4>Video</h4>
+  
+<ul>
+    <li data-ng-repeat="x in videoList">
+      <img src={{x.thumbnails}} alt="Mountain View" >
+    </li>
+  </ul>
+
+video ng-src="{{ videoList[0].url }}" controls></video
+<span>My first expression: {{ link }}</span>
+<input type="text" ng-model="name">
+<p ng-bind="name"></p>
+</div>
+
+</body>
+</html-->
+<!--//https://www.youtube.com/embed/nZsMJgWXb6M
+"{{$scope.videoList[0].url}}"

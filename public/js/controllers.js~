@@ -1,0 +1,64 @@
+/*  Module
+ *
+ * Description
+ */
+var cllsControllers = angular.module('CllsControllers', ['app.config']);
+cllsControllers.controller('LecturesCtrl', ['$scope', '$http', 'LECTURES_URL', function($scope, $http, LECTURES_URL) {
+   $scope.lecturesList = [];
+   var req = {
+      method: 'GET',
+      //url: 'http://localhost:3000/lectures',
+      url: LECTURES_URL,
+      headers: {
+         'Content-Type': 'application/json'
+      }
+   };
+
+   $http(req).success(function(data, status, headers, config) {
+      $scope.lecturesList = data;
+      
+      /* Filtering */
+      var allModuleCategories = data.map(function(item) {
+         return item.moduletitle;
+      });
+
+      var filteredModules = [];
+      allModuleCategories.forEach(function(item) {
+         if (filteredModules.indexOf(item) < 0 && item) {
+            filteredModules.push(item);
+         }
+      });
+
+		$scope.modules = filteredModules;
+      
+      $scope.filter = { modules: "" };
+
+      $scope.isFiltered = function(val) {
+         return !$scope.filter.modules[val.moduletitle];
+      }      
+   });
+}]);
+
+cllsControllers.controller('clickController', function($scope, $http) {
+   $scope.rowClick = function() {
+     // alert(this.lecture.url); // pop up the selected lecture URI
+      //$urlval = this.lecture.url;
+	$http({
+		method: 'POST',
+		url: 'lectures/videolecture',
+		data: 'this.lecture.url',
+		responseType: "json",
+		headers: {
+			'Content-Type': 'application/json'
+			}
+		}).success(function data){
+			console.log(data);
+			if(data.success)
+				alert("Yes");
+			else
+				alert("NO");
+			});
+     // $scope.selected = this.lecture;
+      //console.log($scope.selected);
+   };
+});

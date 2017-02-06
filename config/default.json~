@@ -1,0 +1,29 @@
+{
+   "CAS": {
+    "casendpoint": "https://sso.hrz.tu-darmstadt.de",
+    "casreturn": "http://localhost:3000"
+     },
+
+  "Store": {
+    "protocol": "http://",
+    "url": "cc205.rbg.informatik.tu-darmstadt.de",
+    "port": "10035",
+    "repository": "clls-demo",
+    "Credentials": {
+       "user": "iptk",
+       "password": "wsFv38bgXTZW"
+    }
+  },
+  "Node": {
+    "server": {
+      "port": "3000"
+    }
+  },
+  "Logging": {
+    "level": "dev"
+  },
+"CAS": {
+    "casendpoint": "https://sso.hrz.tu-darmstadt.de",
+    "casreturn": "http://localhost:3000"
+  }
+}

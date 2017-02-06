@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html ng-app="CllsControllers">
+   <head>
+      <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+      <!-- Use for production -->
+      <script type="text/javascript" src="libs/angular/angular.min.js"></script>
+      <!-- Use for debugging -->
+      <!--<script type="text/javascript" src="libs/angular/angular.js"></script>-->
+      <script type="text/javascript" src="js/config.js"></script>
+      <script type="text/javascript" src="js/controllers.js"></script>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+   </head>
+   <body>
+      <h2>Lecture Recordings</h2>
+      <div class="container-fluid" ng-controller="LecturesCtrl">
+         <div class="row">
+            <div class="col-md-2">
+               <div>
+                  <h5>Filter</h5> <input type="text" ng-model="textsearch"></div>
+                  <div>
+                     <h5>Hide Modules:</h5>
+                     <div ng-repeat="module in modules">
+                        <input type="checkbox" ng-model="filter.modules[module]"> {{module}}
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-8">
+                  <table class="table table-condensed table-hover" ng-controller="clickController">
+                     <tr>
+                        <th>Lecture Title</th>
+                        <th>Module</th>
+                        <th>Term</th>
+                        <th>Date</th>
+                     </tr>
+                     <tr ng-repeat="lecture in lecturesList | orderBy:'-date' | filter:isFiltered | filter:{'title':textsearch}" ng-click="rowClick();" >
+                        <td>{{lecture.title}}</td>
+                        <td>{{lecture.moduletitle}}</td>
+                        <td>{{lecture.semestertitle}}</td>
+                        <td>{{lecture.date | date:'dd. MMM.yyyy HH:mm'}}</td>
+                        <td><button type="button" class="btn btn-primary" ng-click="admin();$event.stopPropagation()">Edit</button></td>
+                     </tr>
+                  </table>
+               </div>
+               <div class="col-md-2"></div>
+            </div>
+         </div>
+      </body>
+   </html>
